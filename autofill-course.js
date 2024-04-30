@@ -36,7 +36,7 @@ function check(changes, observer) {
         let course_selector_query = '[data-comments-field-id="course"] div[data-ui="Autocomplete"] input#course'
         if(document.querySelector(course_selector_query)) {
 
-            course_code = window.location.href.split('course;')[1]
+            course_code = window.location.href.split('course;')[1].split(';')[0]
             let course_selector_element = document.querySelector(course_selector_query)
 
             if (last != course_selector_element) {
