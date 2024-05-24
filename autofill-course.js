@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Autofill Course
 // @namespace    https://rizeedu.sanity.studio
-// @version      2024-04-29
+// @version      2024-05-24
 // @description  Adds functionality to Sanity UI to automatically fill the course field with the current course
 // @author       Matt Wyndham
 // @match        https://rizeedu.sanity.studio/*
@@ -19,6 +19,20 @@
     setTimeout(()=>{ buildControlButton() }, 1000);
 })();
 
+/*
+let waiting_to_publish = null
+let c = 0
+function auto_publish() {
+    let publish_button_query = 'button[data-ui="Button"][data-testid="action-Publish"][data-disabled="false"]'
+    if (document.querySelector(publish_button_query)) {
+        console.log(`${c++}: clear timout, wait 5 sec, try again`)
+        clearTimeout(waiting_to_publish)
+        waiting_to_publish = setTimeout(()=>{
+            document.querySelector(publish_button_query).click()
+        }, 5000)
+    }
+}*/
+
 let last = null
 let final = null
 let course_code
@@ -26,6 +40,11 @@ let course_code
 function check(changes, observer) {
     // observer.disconnect() // to stop watching completely
 
+    // click the publish button every time it is allowed
+    /* auto_publish() */
+
+    // check for empty Course fields
+    // and automatically fill them with the current course
     let toggle = document.querySelector('.button#course-autofill-control-button')
     if (toggle &&
         toggle.dataset.active === 'true' &&
@@ -82,12 +101,13 @@ function buildControlButton() {
         button.title = 'Autofill the Course field with the current course (toggle)'
 
         // functionality
-        button.dataset.active = localStorage.getItem('course-autofill-control-button') || 'false'
+//        button.dataset.active = localStorage.getItem('course-autofill-control-button') || 'false'
+        button.dataset.active = 'false'
         button.innerHTML = (button.dataset.active === 'false' ? `${adjustments_stop} ${button_text}` : `${adjustments_cog} ${button_text}`)
         button.addEventListener('click', (event)=>{
             button.dataset.active = button.dataset.active === 'true' ? 'false' : 'true'
             button.innerHTML = (button.dataset.active === 'false' ? `${adjustments_stop} ${button_text}` : `${adjustments_cog} ${button_text}`)
-            localStorage.setItem('course-autofill-control-button', button.dataset.active)
+//            localStorage.setItem('course-autofill-control-button', button.dataset.active)
         })
 
         // add to doc
